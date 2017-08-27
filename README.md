@@ -1,5 +1,5 @@
 ## Papers Used
-* ![Context-Aware Elevator Scheduling](https://www.semanticscholar.org/paper/Context-Aware-Elevator-Scheduling-Strang-Bauer/6af00d65db3fe72658d041829ddfc682c0a12e46)
+* [Context-Aware Elevator Scheduling](https://www.semanticscholar.org/paper/Context-Aware-Elevator-Scheduling-Strang-Bauer/6af00d65db3fe72658d041829ddfc682c0a12e46)
 
 
 ## Elevator Model
@@ -76,7 +76,7 @@ of elevators, or
 		* **P3 Passage Three** calls **require reversing** the direction **twice**
 	* Floor calls with direction UP are only served by an elevator when travelling upwards, calls with direction DOWN only when travelling downwards
 
-	![Three Passage Group Elevator Scheduling Diagram]()
+	![Three Passage Group Elevator Scheduling Diagram](https://github.com/00111000/Elevator-Scheduling/blob/master/Three-Passage-Group-Elevator-Scheduling.png)
 
 	* The calls from floors 5 and 7 with direction UP can be served along the elevator’s current movement direction and are therefore P1 calls. Level 7, being the highest floor with the last calls to serve, is the **reversal floor**, as the elevator will have to reverse its travel direction at this position in order to serve the remaining calls
 	* The calls from level 6 and 2, both with direction DOWN, are therefore P2 calls, as direction is reversed once prior to serving
