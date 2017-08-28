@@ -96,7 +96,7 @@ of elevators, or
 
 ## Simulations
 
-![]()
+![UML Diagram](https://github.com/00111000/Elevator-Scheduling/blob/master/UML-Diagram.png)
 
 * Setup and Parameters
 	* Number of floors N
@@ -115,9 +115,6 @@ of elevators, or
 
 Passengers are modelled in the simulation as they behave in the real world, i.e. they may not be cooperative in the sense of the optimization task of the controller: They sometimes enter a car that has arrived without paying attention whether it is the called one and whether it is travelling in the desired direction or not.
 
-* Scenarios
-	* 
-
 ## Context-Aware Elevator Systems
 
 * Depending on the type of sensor output, either the **Group Elevator Controller** or **Elevator Controller** can benefit from and adapt to additional input parameters
@@ -126,7 +123,7 @@ Passengers are modelled in the simulation as they behave in the real world, i.e.
 results in a better performance compared to switching based just on statistics
 	*  Decision could be made by an additional switching controller, hierarchically above the **Group Elevator Controller**
 
-![]()
+![Context-Aware Elevator Systems Diagram](https://github.com/00111000/Elevator-Scheduling/blob/master/Context-Aware-Elevator-Systems.png)
 
 * Context-Aware Group Scheduler Switching
 	* Correlation between the weather and the passenger traffic pattern during lunchtime. Assuming a restaurant is located at the top level as indicated in figure 3, offering a roof-deck for guests, we could conclude that office **workers will head to the top level during lunch hours on a sunny summer day**, therefore overlaying the usual lunch hour traffic pattern (from Mixed-peak to Up-peak). If we can conclude from some weather sensors that the roof-deck has high acceptance, the passenger traffic demand conforms to an Up-peak from Mixed-peak. Contrary, rain, snowfall, high wind speed or low temperature will have no effect on the standard Mixed-peak demand
