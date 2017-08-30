@@ -1,14 +1,22 @@
 public class GroupElevatorController {
 
-    private int algorithm; // Get from Building Class
-    private Elevator elevatorGroup[]; // Get from Building Class
-    private Floor floors[]; // Get from Building Class
+    private Elevator elevatorGroup[];
+    private Floor floors[];
+
+    private int algorithm;
+
+    public GroupElevatorController(Elevator[] elevatorGroup, Floor[] floors){
+        this.elevatorGroup = elevatorGroup;
+        this.floors = floors;
+    }
+
+    public void setAlgorithm(int algorithm){ this.algorithm = algorithm; }
 
     /**
      * Scan the floors array and collect Passengers from each floor (remove them after recording).
-     * Based of the algorithm, assign a Passenger(s) to one of the elevators
+     * Based on the algorithm, assign a Passenger(s) to one of the elevators
      * from the elevatorGroup array.
-     * Break apart the passenger object, put Passenger.boardingFloor to the pickupCalls array
+     * Break apart the passenger object, put Passenger.boardingFloor to the floorCalls array
      * put Passenger.exitFloor to the carCalls array
      */
     public void scheduler(){

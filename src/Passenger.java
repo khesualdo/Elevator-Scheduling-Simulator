@@ -1,5 +1,6 @@
 public class Passenger {
 
-    private Call floorFloor; // Floor call
-    private Call exitFloor; // Car call
+    private Call callFloor;
+    private Call exitFloor;
+    private int ID;
 }
