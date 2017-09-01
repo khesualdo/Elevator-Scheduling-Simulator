@@ -4,5 +4,16 @@ public class Call {
     private int passage; // 1- P1, 2 - P2, 3 - P3
     private int floor; // floor call - from where, car call - to where
     private int direction; // 1 - Up, 0 - Down
-    private int ID;
+    private String ID;
+
+    public Call(int type, int floor, int direction, String ID) {
+        this.type = type;
+        this.floor = floor;
+        this.direction = direction;
+        this.ID = ID;
+    }
+
+    public void setPassage(int passage) {
+        this.passage = passage;
+    }
 }

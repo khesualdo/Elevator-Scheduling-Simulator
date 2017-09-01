@@ -4,7 +4,7 @@ public class Elevator {
 
     private ArrayList<Call> floorCalls; // Holds floorCalls
     private ArrayList<Call> carCalls; // Holds carCalls
-    private ArrayList<Integer> sequence; // Holds sorted floorCalls and carCalls
+    private ArrayList<Call> sequence; // Holds sorted floorCalls and carCalls
 
     private int algorithm; // Set at the time of elevator creation
 
@@ -28,6 +28,9 @@ public class Elevator {
         this.sequence = new ArrayList<>();
     }
 
+    public void receiveJob(){
+
+    }
 
     /**
      * Must sort out Floor calls and Car calls based on the algorithm

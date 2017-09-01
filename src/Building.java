@@ -23,6 +23,14 @@ public class Building {
         this.controller = new GroupElevatorController(this.elevatorGroup, this.floors);
     }
 
+    public int getN() {
+        return N;
+    }
+
+    /**
+     * Sets the default algorithm throughout the program
+     * @param algorithm - desired algorithm
+     */
     private void setAlgorithm(int algorithm){
         this.algorithm = algorithm;
         this.controller.setAlgorithm(this.algorithm);
@@ -43,33 +51,34 @@ public class Building {
      */
     private void createFloors(){
         for(int i=0; i<this.N; ++i){
-            this.floors[i] = new Floor();
+            this.floors[i] = new Floor(i);
         }
     }
 
     /**
-     * Randomly select a floor from the floors array and
-     * call the generatePassenger method on the Floor(i) object.
-     *
-     * Generates a passenger on one of the floors.
+     * Randomly selects a floor from the floors array and
+     * calls the generatePassenger method on the Floor(randFloor) object.
      */
-    public void generateFloorCall(){
+    private void generatePassenger(int N){
         Random rand = new Random();
+        int randFloor = rand.nextInt((N - 1));
+
+        floors[randFloor].generatePassenger(N);
+        System.out.printf("\n\nFloor %d is selected.\n\n", randFloor);
     }
 
     /**
-     * Call this method from GroupElevatorController.
-     * So we don't have multiple while TRUE loops - only one
+     * Calls the scheduler method from GroupElevatorController.
      */
     public void activateScheduler(){
-
+        this.controller.scheduler();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         Scanner reader = new Scanner(System.in);
         
-        if(false) {
+        if(args.length == 3) {
             Building building = new Building(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
             // Chose algorithm
@@ -84,6 +93,17 @@ public class Building {
 
             // Create L number of Elevator objects
             building.createElevators();
+
+            while(true){
+
+                // Generate a passenger on one of the floors
+                building.generatePassenger(building.getN());
+                Thread.sleep(2000);
+
+                // Activate the GroupElevatorController to scan the floors array
+                building.activateScheduler();
+                Thread.sleep(2000);
+            }
 
         }else{
             System.out.println("Usage: java Building <number of floors> <number of elevators> <building population>");
