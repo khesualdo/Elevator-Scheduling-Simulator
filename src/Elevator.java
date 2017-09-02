@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Elevator {
 
-    private ArrayList<Call> floorCalls; // Holds floorCalls
-    private ArrayList<Call> carCalls; // Holds carCalls
-    private ArrayList<Call> sequence; // Holds sorted floorCalls and carCalls
+    private LinkedBlockingQueue<Call> floorCalls; // Holds floorCalls
+    private LinkedBlockingQueue<Call> carCalls; // Holds carCalls
+    private LinkedBlockingQueue<Call> sequence; // Holds sorted floorCalls and carCalls
 
     private int algorithm; // Set at the time of elevator creation
 
@@ -23,13 +24,19 @@ public class Elevator {
         this.capacity = capacity;
         this.interFloorHeight = interFloorHeight;
 
-        this.floorCalls = new ArrayList<>();
-        this.carCalls = new ArrayList<>();
-        this.sequence = new ArrayList<>();
+        this.floorCalls = new LinkedBlockingQueue<>();
+        this.carCalls = new LinkedBlockingQueue<>();
+        this.sequence = new LinkedBlockingQueue<>();
     }
 
-    public void receiveJob(){
-
+    /**
+     * Breaks apart the Passenger object.
+     * Puts Passenger.floorCall to the floorCalls array.
+     * put Passenger.carCall to the carCalls array.
+     */
+    public void receiveJob(Passenger temp) throws InterruptedException {
+        this.floorCalls.put(temp.getFloorCall());
+        this.carCalls.put(temp.getCarCall());
     }
 
     /**

@@ -16,4 +16,12 @@ public class Call {
     public void setPassage(int passage) {
         this.passage = passage;
     }
+
+    public int getType() {
+        return type;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
 }

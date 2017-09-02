@@ -12,6 +12,8 @@ public class Building {
     private Floor floors[]; // An array of N floors
     private GroupElevatorController controller; // reference to the controller used for controller setup
 
+    Random rand;
+
     public Building(int N, int L, int U){
         this.N = N;
         this.L = L;
@@ -21,6 +23,8 @@ public class Building {
         this.floors = new Floor[this.N];
 
         this.controller = new GroupElevatorController(this.elevatorGroup, this.floors);
+
+        this.rand = new Random();
     }
 
     public int getN() {
@@ -59,27 +63,32 @@ public class Building {
      * Randomly selects a floor from the floors array and
      * calls the generatePassenger method on the Floor(randFloor) object.
      */
-    private void generatePassenger(int N){
-        Random rand = new Random();
-        int randFloor = rand.nextInt((N - 1));
+    private void generatePassenger(int N) throws InterruptedException {
+
+        int randFloor = rand.nextInt(N);
 
         floors[randFloor].generatePassenger(N);
-        System.out.printf("\n\nFloor %d is selected.\n\n", randFloor);
+        System.out.printf("floorCall from floor %d.\n", randFloor);
     }
 
     /**
      * Calls the scheduler method from GroupElevatorController.
      */
-    public void activateScheduler(){
+    public void activateScheduler() throws InterruptedException {
         this.controller.scheduler();
     }
 
     public static void main(String[] args) throws InterruptedException {
 
         Scanner reader = new Scanner(System.in);
-        
-        if(args.length == 3) {
-            Building building = new Building(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+
+        int N = Integer.parseInt(args[0]);
+        int L = Integer.parseInt(args[1]);
+        int U = Integer.parseInt(args[2]);
+
+        if((args.length == 3) && (N > 1) && (L > 0) && (U > 0)){
+
+            Building building = new Building(N, L, U);
 
             // Chose algorithm
             building.setAlgorithm(1);
@@ -106,7 +115,7 @@ public class Building {
             }
 
         }else{
-            System.out.println("Usage: java Building <number of floors> <number of elevators> <building population>");
+            System.out.println("Usage: java Building <number of floors, at least 2>\n\t\t<number of elevators, at least 1>\n\t\t<building population, at least 1>");
         }
     }
 }
