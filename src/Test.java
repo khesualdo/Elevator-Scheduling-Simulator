@@ -1,0 +1,75 @@
+// Test.java
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+public class Test
+{
+    public static int j;
+
+    public static void setJ(int j) {
+        Test.j = j;
+    }
+
+    public static void main(String[] args)
+    {
+
+        Test t1 = new Test();
+        t1.setJ(20);
+        Test t2 = new Test();
+        t2.setJ(30);
+
+//        Comparator<String> comparator = new StringLengthComparator();
+//        PriorityQueue<String> queue = new PriorityQueue<String>(10, comparator);
+
+        Comparator<Integer> comparator = new StringLengthComparator();
+        PriorityQueue<Integer> queue = new PriorityQueue<>(2, comparator);
+
+        queue.add(2);
+        queue.add(1);
+        queue.add(3);
+
+        while (queue.size() != 0)
+        {
+            System.out.println(queue.remove());
+        }
+    }
+}
+
+class StringLengthComparator implements Comparator<Integer> {
+
+    @Override
+    public int compare(Integer x, Integer y) {
+
+        // <0 The element pointed by p1 goes before the element pointed by p2
+        // 0  The element pointed by p1 is equivalent to the element pointed by p2
+        // >0 The element pointed by p1 goes after the element pointed by p2
+
+        System.out.println(Test.j);
+
+        if (x < y) {
+            return -1;
+        } else if (x > y) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    //    @Override
+//    public int compare(String x, String y)
+//    {
+//        // Assume neither string is null. Real code should
+//        // probably be more robust
+//        // You could also just return x.length() - y.length(),
+//        // which would be more efficient.
+//        if (x.length() < y.length())
+//        {
+//            return -1;
+//        }
+//        if (x.length() > y.length())
+//        {
+//            return 1;
+//        }
+//        return 0;
+//    }
+}

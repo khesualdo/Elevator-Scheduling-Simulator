@@ -24,4 +24,16 @@ public class Call {
     public int getFloor() {
         return floor;
     }
+
+    public int getPassage() {
+        return passage;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public String getID() {
+        return ID;
+    }
 }

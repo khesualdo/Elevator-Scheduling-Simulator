@@ -58,7 +58,7 @@ public class Floor {
         System.out.println(direction);
         System.out.println(randFloor);
 
-        Call floorCall = new Call(1, randFloor, direction, ID); // Create a callFloor object
+        Call floorCall = new Call(1, randFloor, direction, ID);
 
         // Randomly generate an exitCall, based on randFloor
         int exitFloor = 0;
@@ -76,7 +76,7 @@ public class Floor {
 
         System.out.println(exitFloor);
 
-        Call carCall = new Call(0, exitFloor, direction, ID); // Create a exitFloor object
+        Call carCall = new Call(0, exitFloor, direction, ID);
 
         this.passengers.put(new Passenger(floorCall, carCall, ID)); // Create a Passenger object and add it the to the passengers array
     }

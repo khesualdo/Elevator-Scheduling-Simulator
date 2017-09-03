@@ -1,4 +1,4 @@
-public class GroupElevatorController {
+public class GroupElevatorController implements Runnable {
 
     private Elevator elevatorGroup[];
     private Floor floors[];
@@ -9,6 +9,9 @@ public class GroupElevatorController {
     private RR rr;
 
     public GroupElevatorController(Elevator[] elevatorGroup, Floor[] floors){
+
+        super(); // Call the constructor of the super class - Thread
+
         this.elevatorGroup = elevatorGroup;
         this.floors = floors;
 
@@ -19,12 +22,24 @@ public class GroupElevatorController {
 
     public void setAlgorithm(int algorithm){ this.algorithm = algorithm; }
 
+    @Override
+    public void run(){
+        try {
+            while(true) {
+                scheduler();
+                Thread.sleep(2000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("GroupElevatorController thread failed!");
+        }
+    }
+
     /**
      * Scan the floors array, looks for a floor with at least one passenger.
      * Based on the algorithm, assigns a Passenger to one of the elevators
      * from the elevatorGroup array.
      */
-    public void scheduler() throws InterruptedException {
+    private void scheduler() throws InterruptedException {
 
         int chosenElevator = 0;
         boolean foundPassenger = false;
@@ -73,10 +88,10 @@ public class GroupElevatorController {
             }
         }
 
-        if(foundPassenger)
+        if(foundPassenger) {
             System.out.printf("Elevator %d has received a job from %d floor.\n", chosenElevator, tempPassenger.getFloorCall().getFloor());
-
-        // this.elevatorGroup[chosenElevator].receiveJob(temp); // Assign a passenger to an elevator
+            this.elevatorGroup[chosenElevator].receiveJob(tempPassenger); // Assign a passenger to an elevator
+        }
 
     }
 }

@@ -12,7 +12,8 @@ public class Building {
     private Floor floors[]; // An array of N floors
     private GroupElevatorController controller; // reference to the controller used for controller setup
 
-    Random rand;
+    private Random rand;
+    private Scanner reader;
 
     public Building(int N, int L, int U){
         this.N = N;
@@ -25,28 +26,28 @@ public class Building {
         this.controller = new GroupElevatorController(this.elevatorGroup, this.floors);
 
         this.rand = new Random();
+        this.reader = new Scanner(System.in);
     }
 
-    public int getN() {
-        return N;
-    }
+    public int getN() { return N; }
 
-    /**
-     * Sets the default algorithm throughout the program
-     * @param algorithm - desired algorithm
-     */
-    private void setAlgorithm(int algorithm){
-        this.algorithm = algorithm;
-        this.controller.setAlgorithm(this.algorithm);
-    }
+    public void setAlgorithm(int algorithm){ this.algorithm = algorithm; }
 
     /**
      * Creates L Elevator objects in the elevatorGroup array.
      */
     private void createElevators(){
         for(int i=0; i<this.L; ++i){
-            this.elevatorGroup[i] = new Elevator(this.algorithm, 1,
+            this.elevatorGroup[i] = new Elevator(i, this.algorithm, 1,
                     1, 1, this.U / 4, 3);
+            this.elevatorGroup[i].setCurrentFloor(N/2);
+            this.elevatorGroup[i].setDirection(1);
+        }
+
+        // Create elevator threads
+        for(int i=0; i<this.L; ++i){
+            new Thread(this.elevatorGroup[i]).start(); // Start thread with elevatorController
+            this.elevatorGroup[i].performTask(); // Start thread with performTask
         }
     }
 
@@ -57,6 +58,10 @@ public class Building {
         for(int i=0; i<this.N; ++i){
             this.floors[i] = new Floor(i);
         }
+    }
+
+    public GroupElevatorController getController() {
+        return controller;
     }
 
     /**
@@ -71,27 +76,16 @@ public class Building {
         System.out.printf("floorCall from floor %d.\n", randFloor);
     }
 
-    /**
-     * Calls the scheduler method from GroupElevatorController.
-     */
-    public void activateScheduler() throws InterruptedException {
-        this.controller.scheduler();
-    }
-
     public static void main(String[] args) throws InterruptedException {
 
-        Scanner reader = new Scanner(System.in);
+        if((args.length == 3) && (Integer.parseInt(args[0]) > 1) &&
+                (Integer.parseInt(args[1]) > 0) && (Integer.parseInt(args[2]) > 0)) {
 
-        int N = Integer.parseInt(args[0]);
-        int L = Integer.parseInt(args[1]);
-        int U = Integer.parseInt(args[2]);
-
-        if((args.length == 3) && (N > 1) && (L > 0) && (U > 0)){
-
-            Building building = new Building(N, L, U);
+            Building building = new Building(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
             // Chose algorithm
             building.setAlgorithm(1);
+            building.getController().setAlgorithm(1);
             // System.out.println("Choose algorithm:");
             // System.out.println("1 - Round Robin");
             // building.setAlgorithm(reader.nextInt());
@@ -103,14 +97,13 @@ public class Building {
             // Create L number of Elevator objects
             building.createElevators();
 
-            while(true){
+            // Start the GroupElevatorController thread
+            new Thread(building.getController()).start(); // Activates the GroupElevatorController to scan the floors array
+
+            while(true) {
 
                 // Generate a passenger on one of the floors
                 building.generatePassenger(building.getN());
-                Thread.sleep(2000);
-
-                // Activate the GroupElevatorController to scan the floors array
-                building.activateScheduler();
                 Thread.sleep(2000);
             }
 
