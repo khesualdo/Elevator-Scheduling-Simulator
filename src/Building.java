@@ -40,14 +40,15 @@ public class Building {
         for(int i=0; i<this.L; ++i){
             this.elevatorGroup[i] = new Elevator(i, this.algorithm, 1,
                     1, 1, this.U / 4, 3);
-            this.elevatorGroup[i].setCurrentFloor(N/2);
-            this.elevatorGroup[i].setDirection(1);
+            this.elevatorGroup[i].setCurrentFloor(N/2); // This will depend on the algorithm
+            this.elevatorGroup[i].setDirection(1); // Should be chosen randomly
+            this.elevatorGroup[i].setNumberOfFloors(N);
         }
 
         // Create elevator threads
         for(int i=0; i<this.L; ++i){
-            new Thread(this.elevatorGroup[i]).start(); // Start thread with elevatorController
-            this.elevatorGroup[i].performTask(); // Start thread with performTask
+            this.elevatorGroup[i].elevatorControllerThread();
+            this.elevatorGroup[i].performJobThread();
         }
     }
 
@@ -70,7 +71,7 @@ public class Building {
      */
     private void generatePassenger(int N) throws InterruptedException {
 
-        int randFloor = rand.nextInt(N);
+        int randFloor = this.rand.nextInt(N);
 
         floors[randFloor].generatePassenger(N);
         System.out.printf("floorCall from floor %d.\n", randFloor);
@@ -100,6 +101,7 @@ public class Building {
             // Start the GroupElevatorController thread
             new Thread(building.getController()).start(); // Activates the GroupElevatorController to scan the floors array
 
+            // Keep generating passengers on different floors of the building
             while(true) {
 
                 // Generate a passenger on one of the floors

@@ -63,11 +63,15 @@ public class Floor {
         // Randomly generate an exitCall, based on randFloor
         int exitFloor = 0;
         if(direction == 1) {
+
+            // Generate random number, until it's greater than randFloor
             exitFloor = rand.nextInt(numberOfFloors);
             while (exitFloor <= randFloor){
                 exitFloor = rand.nextInt(numberOfFloors);
             }
         }else{
+
+            // Generate random number, until it's smaller than randFloor
             exitFloor = rand.nextInt(numberOfFloors);
             while (exitFloor >= randFloor){
                 exitFloor = rand.nextInt(numberOfFloors);

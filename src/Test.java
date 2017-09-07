@@ -1,4 +1,5 @@
 // Test.java
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -12,26 +13,37 @@ public class Test
 
     public static void main(String[] args)
     {
+//
+//        Test t1 = new Test();
+//        t1.setJ(20);
+//        Test t2 = new Test();
+//        t2.setJ(30);
+//
+////        Comparator<String> comparator = new StringLengthComparator();
+////        PriorityQueue<String> queue = new PriorityQueue<String>(10, comparator);
+//
+//        Comparator<Integer> comparator = new StringLengthComparator();
+//        PriorityQueue<Integer> queue = new PriorityQueue<>(2, comparator);
+//
+//        queue.add(2);
+//        queue.add(1);
+//        queue.add(3);
+//
+//        while (queue.size() != 0)
+//        {
+//            System.out.println(queue.remove());
+//        }
 
-        Test t1 = new Test();
-        t1.setJ(20);
-        Test t2 = new Test();
-        t2.setJ(30);
-
-//        Comparator<String> comparator = new StringLengthComparator();
-//        PriorityQueue<String> queue = new PriorityQueue<String>(10, comparator);
-
-        Comparator<Integer> comparator = new StringLengthComparator();
-        PriorityQueue<Integer> queue = new PriorityQueue<>(2, comparator);
-
-        queue.add(2);
-        queue.add(1);
-        queue.add(3);
-
-        while (queue.size() != 0)
-        {
-            System.out.println(queue.remove());
+//        while
+        try {
+            ArrayList<Integer> n = new ArrayList<>();
+            System.out.println(n.get(0));
+        }catch (IndexOutOfBoundsException e){
+            System.out.println();
         }
+
+        System.out.println("asd");
+
     }
 }
 
