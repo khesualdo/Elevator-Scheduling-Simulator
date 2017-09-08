@@ -1,3 +1,7 @@
+## Links
+
+* [CopyOnWriteArrayList](http://www.baeldung.com/java-copy-on-write-arraylist)
+
 ## Papers Used
 * [Context-Aware Elevator Scheduling](https://www.semanticscholar.org/paper/Context-Aware-Elevator-Scheduling-Strang-Bauer/6af00d65db3fe72658d041829ddfc682c0a12e46)
 

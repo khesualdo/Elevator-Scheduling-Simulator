@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class Test
 {
@@ -19,8 +20,25 @@ public class Test
 //        Test t2 = new Test();
 //        t2.setJ(30);
 //
-////        Comparator<String> comparator = new StringLengthComparator();
-////        PriorityQueue<String> queue = new PriorityQueue<String>(10, comparator);
+        PriorityBlockingQueue<Integer> queue = new PriorityBlockingQueue<>(10);
+        queue.add(1);
+        queue.add(2);
+        queue.add(3);
+
+        for(Integer integer : queue){
+
+            if (integer == 2){
+                queue.remove(integer);
+                queue.add(0);
+            }
+
+        }
+
+        for(Integer integer : queue){
+
+            System.out.println(integer);
+
+        }
 //
 //        Comparator<Integer> comparator = new StringLengthComparator();
 //        PriorityQueue<Integer> queue = new PriorityQueue<>(2, comparator);
@@ -35,14 +53,14 @@ public class Test
 //        }
 
 //        while
-        try {
-            ArrayList<Integer> n = new ArrayList<>();
-            System.out.println(n.get(0));
-        }catch (IndexOutOfBoundsException e){
-            System.out.println();
-        }
-
-        System.out.println("asd");
+//        try {
+//            ArrayList<Integer> n = new ArrayList<>();
+//            System.out.println(n.get(0));
+//        }catch (IndexOutOfBoundsException e){
+//            System.out.println();
+//        }
+//
+//        System.out.println("asd");
 
     }
 }

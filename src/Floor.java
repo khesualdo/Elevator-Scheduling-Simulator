@@ -7,6 +7,7 @@ public class Floor {
 
     LinkedBlockingQueue<Passenger> passengers; // Holds passengers (floor calls) at this floor
     private int ID;
+    private boolean DEBUG = false;
 
     public Floor(int ID){
         this.passengers = new LinkedBlockingQueue<>();
@@ -55,8 +56,10 @@ public class Floor {
             direction = rand.nextInt(1); // Randomly select direction
         }
 
-        System.out.println(direction);
-        System.out.println(randFloor);
+        if (DEBUG) {
+            System.out.println(direction);
+            System.out.println(randFloor);
+        }
 
         Call floorCall = new Call(1, randFloor, direction, ID);
 
@@ -78,7 +81,9 @@ public class Floor {
             }
         }
 
-        System.out.println(exitFloor);
+        if (DEBUG) {
+            System.out.println(exitFloor);
+        }
 
         Call carCall = new Call(0, exitFloor, direction, ID);
 

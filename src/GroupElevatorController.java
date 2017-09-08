@@ -10,7 +10,7 @@ public class GroupElevatorController implements Runnable {
 
     public GroupElevatorController(Elevator[] elevatorGroup, Floor[] floors){
 
-        super(); // Call the constructor of the super class - Thread
+        super();
 
         this.elevatorGroup = elevatorGroup;
         this.floors = floors;
@@ -49,16 +49,16 @@ public class GroupElevatorController implements Runnable {
         // Look for a floor with at least one passenger
         for(int i=this.start; i<floors.length; ++i){
 
-            System.out.printf("Currently checking floor %d.\n", i);
+            // System.out.printf("Currently checking floor %d.\n", i);
             Floor floor = floors[i];
 
             if(floor.getPassengers().size() > 0){
 
-                System.out.printf("Floor %d has %d passenger(s)\n", floor.getID(), floor.getPassengers().size());
+                // System.out.printf("Floor %d has %d passenger(s)\n", floor.getID(), floor.getPassengers().size());
 
                 tempPassenger = floor.getPassengers().take(); // Remove the passenger from queue
 
-                System.out.printf("Registered a passenger from floor %d\n", floor.getID());
+                // System.out.printf("Registered a passenger from floor %d\n", floor.getID());
 
                 // Remembers from which index to start scanning next time
                 if(i == (floors.length - 1)){
@@ -93,7 +93,7 @@ public class GroupElevatorController implements Runnable {
                     break;
             }
 
-            System.out.printf("Elevator %d has received a job from %d floor.\n", chosenElevator, tempPassenger.getFloorCall().getFloor());
+            // System.out.printf("Elevator %d has received a job from %d floor.\n", chosenElevator, tempPassenger.getFloorCall().getFloor());
             this.elevatorGroup[chosenElevator].receiveJob(tempPassenger); // Assign a passenger to an elevator
         }
 

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.PriorityBlockingQueue;
 
 class CallComparator implements Comparator<Call> {
@@ -48,8 +50,8 @@ class CallComparator implements Comparator<Call> {
 
 public class Elevator {
 
-    private ArrayList<Call> floorCalls; // Holds floorCalls
-    private ArrayList<Call> carCalls; // Holds carCalls
+    private List<Call> floorCalls; // Holds floorCalls
+    private List<Call> carCalls; // Holds carCalls
     private Comparator<Call> comparator;
     private PriorityBlockingQueue<Call> sequence;
 
@@ -58,6 +60,7 @@ public class Elevator {
     private int currentFloor;
     private int direction; // 1- Up, 0 - Down
     private volatile boolean updatingSequence;
+    private boolean DEBUG = false;
 
     private int passengerLoadingTime; // Always 1 second
     private int passengerUnloadingTime; // Always 1 second
@@ -78,8 +81,8 @@ public class Elevator {
 
         this.updatingSequence = false;
 
-        this.floorCalls = new ArrayList<>();
-        this.carCalls = new ArrayList<>();
+        this.floorCalls = new CopyOnWriteArrayList<>();
+        this.carCalls = new CopyOnWriteArrayList<>();
 
         this.comparator = new CallComparator();
         this.sequence = new PriorityBlockingQueue<>(100, this.comparator);
@@ -101,9 +104,13 @@ public class Elevator {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
+                // System.out.println("Started the performJob thread.");
+
                 while (true){
                     try {
                         performJob();
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         System.out.println("Error with performJob thread");
                     }
@@ -112,69 +119,120 @@ public class Elevator {
         }).start();
     }
 
-    private void checkSequence() throws InterruptedException {
+    private void checkSequence(Call tempCall) throws InterruptedException {
 
-        this.updatingSequence = true;
-        Thread.sleep(1000);
+        // Remove all floorCalls whose floor is the current floor of the elevator,
+        // and add carCalls with the same ID to the sequence
+        // The passengers whose floorCall is the same as currentFloor have boarded the elevator
+        // and pressed a button inside the elevator (made a carCall)
+        if (tempCall.getType() == 1 && tempCall.getFloor() == this.currentFloor) {
 
-        // Traverse the Calls in the sequence to find out if
-        // any Calls need to be remove, because their floor matches the currentFloor of the elevator
-        for(Call call : sequence){
+            int removeIndex = 0;
+            boolean foundCarCall = false;
 
-            // Remove all carCalls whose floor is the current floor of the elevator
-            // The passengers whose carCall is the same as currentFloor have already arrived
-            if (call.getType() == 0 && call.getFloor() == this.currentFloor){
-                this.sequence.remove(call);
+            // Traverse carFloors array
+            for (int i = 0; i < this.carCalls.size(); ++i) {
+
+                Call tempCarCall = this.carCalls.get(i);
+
+                if (tempCarCall.getID().equals(tempCall.getID())) {
+
+                    removeIndex = i;
+
+                    // Assign passage to carCall
+                    // Same direction and higher than currentFloor - P1
+                    // Opposite direction - P2
+                    if ((tempCarCall.getFloor() > this.currentFloor) && (tempCarCall.getDirection() == this.direction)) {
+                        tempCarCall.setPassage(1);
+                    } else {
+                        tempCarCall.setPassage(2);
+                    }
+
+                    // Add carCall to sequence
+                    this.sequence.add(tempCarCall);
+                    foundCarCall = true;
+                    break;
+                }
             }
 
-            // Remove all floorCalls whose floor is the current floor of the elevator,
-            // and add carCalls with the same ID to the sequence
-            // The passengers whose floorCall is the same as currentFloor have boarded the elevator
-            // and pressed a button inside the elevator (made a carCall)
-            if (call.getType() == 1 && call.getFloor() == this.currentFloor){
-
-                int removeIndex = 0;
-                boolean foundCarCall = false;
-
-                // Traverse carFloors array
-                for(int i=0; i < this.carCalls.size(); ++i){
-
-                    if (this.carCalls.get(i).getID().equals(call.getID())){
-
-                        removeIndex = i;
-
-                        Call tempCarCall = this.carCalls.get(i);
-
-                        // Assign passage to carCall
-                        // Same direction and higher than currentFloor - P1
-                        // Opposite direction - P2
-                        if((tempCarCall.getFloor() > this.currentFloor) && (tempCarCall.getDirection() == this.direction)){
-                            tempCarCall.setPassage(1);
-                        }else{
-                            tempCarCall.setPassage(2);
-                        }
-
-                        // Add carCall to sequence
-                        this.sequence.add(tempCarCall);
-                        foundCarCall = true;
-                        break;
-                    }
-                }
-
-                // Remove carCall from carCalls array
-                if (foundCarCall) {
-                    this.carCalls.remove(removeIndex);
-                }else{
-                    System.out.println("\n\n======== Did NOT find a matching carCall ! ========\n\n");
-                }
-
-                // Remove the floorCall from the sequence
-                this.sequence.remove(call);
+            // Remove carCall from carCalls array
+            if (foundCarCall) {
+                this.carCalls.remove(removeIndex);
+            } else {
+                System.out.println("\n\n======== Did NOT find a matching carCall ! ========\n\n");
             }
         }
 
-        this.updatingSequence = false;
+        if (this.sequence.size() > 0) {
 
+            this.updatingSequence = true;
+            Thread.sleep(1000);
+
+            // Traverse the Calls in the sequence to find out if
+            // any Calls need to be remove, because their floor matches the currentFloor of the elevator
+            for (Call call : sequence) {
+
+//                System.out.printf("\n1. Checking Call with ID: %s, and type: %d in sequence.\n\n", call.getID(), call.getType());
+
+                // Remove all carCalls whose floor is the current floor of the elevator
+                // The passengers whose carCall is the same as currentFloor have already arrived
+                if (call.getType() == 0 && call.getFloor() == this.currentFloor) {
+                    this.sequence.remove(call);
+                }
+
+                // Remove all floorCalls whose floor is the current floor of the elevator,
+                // and add carCalls with the same ID to the sequence
+                // The passengers whose floorCall is the same as currentFloor have boarded the elevator
+                // and pressed a button inside the elevator (made a carCall)
+                if (call.getType() == 1 && call.getFloor() == this.currentFloor) {
+
+                    int removeIndex = 0;
+                    boolean foundCarCall = false;
+
+                    // Traverse carFloors array
+                    for (int i = 0; i < this.carCalls.size(); ++i) {
+
+//                        System.out.printf("\n2. Checking carCall with ID: %s in carCalls,\n\n", this.carCalls.get(i).getID());
+
+                        Call tempCarCall = this.carCalls.get(i);
+
+                        if (tempCarCall.getID().equals(call.getID())) {
+
+                            removeIndex = i;
+
+                            // Assign passage to carCall
+                            // Same direction and higher than currentFloor - P1
+                            // Opposite direction - P2
+                            if ((tempCarCall.getFloor() > this.currentFloor) && (tempCarCall.getDirection() == this.direction)) {
+                                tempCarCall.setPassage(1);
+                            } else {
+                                tempCarCall.setPassage(2);
+                            }
+
+                            // Add carCall to sequence
+                            this.sequence.add(tempCarCall);
+                            foundCarCall = true;
+                            break;
+                        }
+                    }
+
+                    // Remove carCall from carCalls array
+                    if (foundCarCall) {
+//                        System.out.printf("\n3. Removed carCall with ID: %s from carCalls,\n\n", this.carCalls.get(removeIndex).getID());
+                        this.carCalls.remove(removeIndex);
+                    } else {
+                        System.out.println("\n\n======== Did NOT find a matching carCall ! ========\n\n");
+                    }
+
+//                    System.out.printf("\n4. Removed floorCall with ID: %s from sequence,\n\n", call.getID());
+                    // Remove the floorCall from the sequence
+                    this.sequence.remove(call);
+                }
+
+            }
+
+            this.updatingSequence = false;
+        }
     }
 
     private void performJob() throws InterruptedException {
@@ -182,174 +240,85 @@ public class Elevator {
         // Get Call from sequence
         Call tempCall = this.sequence.take();
 
-        // If Call is of type P2 or P3, then we have reached the reversal floor and
-        // are going in the opposite direction
-        if ((tempCall.getPassage() == 2) || (tempCall.getPassage() == 3)) {
+        // System.out.printf("Job | direction: %d, passage: %d, floor: %d.\n", tempCall.getDirection(), tempCall.getPassage(), tempCall.getFloor());
 
-            // Set the flag to True, so no more Calls are added
-            // to the sequence, while we are updating current Calls
-            this.updatingSequence = true;
-            Thread.sleep(1000);
-
-            // Change the direction of the elevator
-            if (this.direction == 0) {
-                this.direction = 1;
-            } else {
-                this.direction = 0;
-            }
-
-            // Create a temporally queue
-            PriorityBlockingQueue<Call> tempSequence = new PriorityBlockingQueue<>(100, this.comparator);
-
-            // Decrement the passage for current Calls in the sequence
-            while (!this.sequence.isEmpty()) {
-
-                Call temp = this.sequence.take();
-                temp.setPassage(temp.getPassage() - 1);
-
-                tempSequence.add(temp);
-            }
-
-            // Copy the updated calls to the sequence
-            while (!tempSequence.isEmpty()) {
-                this.sequence.add(tempSequence.take());
-            }
-
-            this.updatingSequence = false;
+        if (tempCall.getFloor() < this.currentFloor){
+            this.direction = 0;
+        }else if( tempCall.getFloor() > this.currentFloor ){
+            this.direction = 1;
         }
+
+//        // If Call is of type P2 or P3, then we have reached the reversal floor and
+//        // are going in the opposite direction
+//        if ((tempCall.getPassage() == 2) || (tempCall.getPassage() == 3)) {
+//
+//            // Set the flag to True, so no more Calls are added
+//            // to the sequence, while we are updating current Calls
+//            this.updatingSequence = true;
+//            Thread.sleep(1000);
+//
+//            System.out.printf("Current Direction %d.\n", this.direction);
+//
+//            // Change the direction of the elevator
+//            if (this.direction == 0) {
+//                this.direction = 1;
+//            } else {
+//                this.direction = 0;
+//            }
+//
+//            System.out.printf("Changed Direction %d.\n", this.direction);
+//
+//            // Create a temporally queue
+//            PriorityBlockingQueue<Call> tempSequence = new PriorityBlockingQueue<>(100, this.comparator);
+//
+//            // Decrement the passage for current Calls in the sequence
+//            while (!this.sequence.isEmpty()) {
+//
+//                Call temp = this.sequence.take();
+//                temp.setPassage(temp.getPassage() - 1);
+//
+//                tempSequence.add(temp);
+//            }
+//
+//            // Copy the updated calls to the sequence
+//            while (!tempSequence.isEmpty()) {
+//                this.sequence.add(tempSequence.take());
+//            }
+//
+//            this.updatingSequence = false;
+//        }
 
         // Simulate elevator movement through the floors of the building
         while ((this.currentFloor != tempCall.getFloor()) &&
-                (this.currentFloor > 0) &&
-                (this.currentFloor < (this.numberOfFloors - 1))) {
+                (this.currentFloor >= 0) &&
+                (this.currentFloor <= (this.numberOfFloors - 1))) {
 
             // Direction is up
-            if (this.direction == 1) {
+            if (this.direction == 1 && this.currentFloor != (this.numberOfFloors - 1)) {
 
                 this.currentFloor += 1;
                 Thread.sleep(this.velocity * this.interFloorHeight * 1000);
 
-                checkSequence();
+                System.out.printf("\n\n+++++ Elevator %d, direction: %d, current floor: %d, target floor: %d. +++++\n", this.ID, this.direction,this.currentFloor, tempCall.getFloor());
+                System.out.printf("+++++ Call direction: %d, Call passage: %d, Call floor: %d, Call type: %d, Call ID: %s. +++++\n\n", tempCall.getDirection(), tempCall.getPassage(), tempCall.getFloor(), tempCall.getType(), tempCall.getID());
 
-            } else if (this.direction == 0) {
+                checkSequence(tempCall);
+
+            } else if (this.direction == 0 && this.currentFloor != 0) {
 
                 this.currentFloor -= 1;
                 Thread.sleep(this.velocity * this.interFloorHeight * 1000);
 
-                checkSequence();
+                System.out.printf("\n\n+++++ Elevator %d, direction:%d, current floor: %d, target floor: %d. +++++\n", this.ID, this.direction, this.currentFloor, tempCall.getFloor());
+                System.out.printf("+++++ Call direction: %d, Call passage: %d, Call floor: %d, Call type: %d, Call ID: %s. +++++\n\n", tempCall.getDirection(), tempCall.getPassage(), tempCall.getFloor(), tempCall.getType(), tempCall.getID());
+
+                checkSequence(tempCall);
 
             } else {
-                System.out.println("\n\n======== Elevator has no direction ! ========\n\n");
+                System.out.println("\n\n+++++ Elevator is out of range - performJob() +++++\n\n");
             }
         }
     }
-
-//        // We have reached the target floor
-//        if (this.currentFloor == tempCall.getFloor()){
-//
-//            // If the Call is of type floorCall, then search for the carCall with the same ID in carCalls array
-//            // Once the carCall is found, assign it a passage of P1 or P2, and insert it into the sequence queue
-//            if (tempCall.getType() == 1){
-//
-//                int removeIndex = 0;
-//                boolean foundCarCall = false;
-//
-//                // Traverse carFloors array
-//                for(int i=0; i < this.carCalls.size(); ++i){
-//
-//                    if (this.carCalls.get(i).getID().equals(tempCall.getID())){
-//
-//                        removeIndex = i;
-//
-//                        Call tempCarCall = this.carCalls.get(i);
-//
-//                        // Assign passage to carCall
-//                        // Same direction and higher than currentFloor - P1
-//                        // Opposite direction - P2
-//                        if((tempCarCall.getFloor() > this.currentFloor) && (tempCarCall.getDirection() == this.direction)){
-//                            tempCarCall.setPassage(1);
-//                        }else{
-//                            tempCarCall.setPassage(2);
-//                        }
-//
-//                        // Add carCall to sequence
-//                        this.sequence.add(tempCarCall);
-//                        foundCarCall = true;
-//                        break;
-//                    }
-//                }
-//
-//                // Remove carCall from carCalls array
-//                if(foundCarCall) {
-//                    this.carCalls.remove(removeIndex);
-//                }else{
-//                    System.out.println("\n\n======== Did NOT find a matching carCall ! ========\n\n");
-//                }
-//            }
-
-//            this.updatingSequence = true;
-//            Thread.sleep(1000);
-
-//            // Traverse the Calls in the sequence to find out if
-//            // any Calls need to be remove, because their floor matches the currentFloor of the elevator
-//            for(Call call : sequence){
-//
-//                // Remove all carCalls whose floor is the current floor of the elevator
-//                // The passengers whose carCall is the same as currentFloor have already arrived
-//                if (call.getType() == 0 && call.getFloor() == this.currentFloor){
-//                    this.sequence.remove(call);
-//                }
-//
-//                // Remove all floorCalls whose floor is the current floor of the elevator,
-//                // and add carCalls with the same ID to the sequence
-//                // The passengers whose floorCall is the same as currentFloor have boarded the elevator
-//                // and pressed a button inside the elevator (made a carCall)
-//                if (call.getType() == 1 && call.getFloor() == this.currentFloor){
-//
-//                    int removeIndex = 0;
-//                    boolean foundCarCall = false;
-//
-//                    // Traverse carFloors array
-//                    for(int i=0; i < this.carCalls.size(); ++i){
-//
-//                        if (this.carCalls.get(i).getID().equals(call.getID())){
-//
-//                            removeIndex = i;
-//
-//                            Call tempCarCall = this.carCalls.get(i);
-//
-//                            // Assign passage to carCall
-//                            // Same direction and higher than currentFloor - P1
-//                            // Opposite direction - P2
-//                            if((tempCarCall.getFloor() > this.currentFloor) && (tempCarCall.getDirection() == this.direction)){
-//                                tempCarCall.setPassage(1);
-//                            }else{
-//                                tempCarCall.setPassage(2);
-//                            }
-//
-//                            // Add carCall to sequence
-//                            this.sequence.add(tempCarCall);
-//                            foundCarCall = true;
-//                            break;
-//                        }
-//                    }
-//
-//                    // Remove carCall from carCalls array
-//                    if (foundCarCall) {
-//                        this.carCalls.remove(removeIndex);
-//                    }else{
-//                        System.out.println("\n\n======== Did NOT find a matching carCall ! ========\n\n");
-//                    }
-//
-//                    // Remove the floorCall from the sequence
-//                    this.sequence.remove(call);
-//                }
-//            }
-//
-//            this.updatingSequence = false;
-//
-//        }
-//    }
 
     /**
      * Breaks apart the Passenger object.
@@ -364,16 +333,36 @@ public class Elevator {
         this.floorCalls.add(floorCall);
         this.carCalls.add(carCall);
 
-        System.out.printf("Elevator %d has received floorCall %d and carCall %d.\n", this.ID, temp.getFloorCall().getFloor(), temp.getCarCall().getFloor());
+        System.out.println("-------------------------");
+        for(Call call : sequence){
+            System.out.printf("Call direction: %d, Call passage: %d, Call floor: %d, Call type: %d, Call ID: %s.\n", call.getDirection(), call.getPassage(), call.getFloor(), call.getType(), call.getID());
+        }
+        System.out.println("-------------------------");
+        for(Call call : floorCalls){
+            System.out.printf("Call direction: %d, Call passage: %d, Call floor: %d, Call type: %d, Call ID: %s.\n", call.getDirection(), call.getPassage(), call.getFloor(), call.getType(), call.getID());
+        }
+        System.out.println("-------------------------");
+        for(Call call : carCalls){
+            System.out.printf("Call direction: %d, Call passage: %d, Call floor: %d, Call type: %d, Call ID: %s.\n", call.getDirection(), call.getPassage(), call.getFloor(), call.getType(), call.getID());
+        }
+        System.out.println("-------------------------");
+
+        if (DEBUG) {
+            System.out.printf("Elevator %d has received floorCall %d and carCall %d.\n", this.ID, temp.getFloorCall().getFloor(), temp.getCarCall().getFloor());
+        }
     }
 
     public void elevatorControllerThread() {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
+                // System.out.println("Started the elevatorController thread.");
+
                 while (true){
                     try {
                         elevatorController();
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         System.out.println("Error with elevatorController thread.");
                     }
@@ -388,28 +377,41 @@ public class Elevator {
      */
     private void elevatorController() throws InterruptedException {
 
-        while (this.floorCalls.size() == 0){}
+        if (this.floorCalls.size() > 0) {
 
-        Call tempCall = this.floorCalls.get(0);
+            Call tempCall = this.floorCalls.get(0);
+            this.floorCalls.remove(0);
 
-        // Assign passage to a newly arrived floorCall
-        // Same direction and higher than currentFloor - P1
-        // Opposite direction - P2
-        // Same direction and lower than currentFloor - P3
-        if((tempCall.getFloor() > this.currentFloor) && (tempCall.getDirection() == this.direction)){
-            tempCall.setPassage(1);
-        }else if((tempCall.getFloor() < this.currentFloor) && (tempCall.getDirection() == this.direction)){
-            tempCall.setPassage(3);
-        }else{
-            tempCall.setPassage(2);
+            // Assign passage to a newly arrived floorCall
+
+            // Same direction and higher than currentFloor - P1
+            // Opposite direction - P2
+            // Same direction and lower than currentFloor - P3
+            if (this.direction == 1) {
+                if ((tempCall.getFloor() > this.currentFloor) && (tempCall.getDirection() == this.direction)) {
+                    tempCall.setPassage(1);
+                } else if ((tempCall.getFloor() < this.currentFloor) && (tempCall.getDirection() == this.direction)) {
+                    tempCall.setPassage(3);
+                } else {
+                    tempCall.setPassage(2);
+                }
+            }else {
+
+                // Same direction and lower than currentFloor - P1
+                // Opposite direction - P2
+                // Same direction and higher than currentFloor - P3
+                if ((tempCall.getFloor() < this.currentFloor) && (tempCall.getDirection() == this.direction)) {
+                    tempCall.setPassage(1);
+                } else if ((tempCall.getFloor() > this.currentFloor) && (tempCall.getDirection() == this.direction)) {
+                    tempCall.setPassage(3);
+                } else {
+                    tempCall.setPassage(2);
+                }
+            }
+
+             while (updatingSequence) {}
+
+            this.sequence.add(tempCall);
         }
-
-        while (updatingSequence){}
-
-        this.sequence.add(tempCall);
-
-        System.out.printf("--- Elevator's direction is %d.\n", this.direction);
-        System.out.printf("--- Added a request to the queue, direction: %d, floor: %d.\n", tempCall.getDirection(), tempCall.getFloor());
-        System.out.printf("--- First element in sequence queue has direction: %d, floor: %d.\n", this.sequence.peek().getDirection(), this.sequence.peek().getFloor());
     }
 }

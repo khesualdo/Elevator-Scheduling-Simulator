@@ -41,7 +41,7 @@ public class Building {
             this.elevatorGroup[i] = new Elevator(i, this.algorithm, 1,
                     1, 1, this.U / 4, 3);
             this.elevatorGroup[i].setCurrentFloor(N/2); // This will depend on the algorithm
-            this.elevatorGroup[i].setDirection(1); // Should be chosen randomly
+            this.elevatorGroup[i].setDirection(1);
             this.elevatorGroup[i].setNumberOfFloors(N);
         }
 
@@ -70,11 +70,8 @@ public class Building {
      * calls the generatePassenger method on the Floor(randFloor) object.
      */
     private void generatePassenger(int N) throws InterruptedException {
-
         int randFloor = this.rand.nextInt(N);
-
         floors[randFloor].generatePassenger(N);
-        System.out.printf("floorCall from floor %d.\n", randFloor);
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -91,7 +88,6 @@ public class Building {
             // System.out.println("1 - Round Robin");
             // building.setAlgorithm(reader.nextInt());
 
-
             // Create N number of Floor objects
             building.createFloors();
 
@@ -106,7 +102,7 @@ public class Building {
 
                 // Generate a passenger on one of the floors
                 building.generatePassenger(building.getN());
-                Thread.sleep(2000);
+                Thread.sleep(15000);
             }
 
         }else{
