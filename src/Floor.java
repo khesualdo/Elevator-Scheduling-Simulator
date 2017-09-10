@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Floor {
 
-    LinkedBlockingQueue<Passenger> passengers; // Holds passengers (floor calls) at this floor
+    LinkedBlockingQueue<Passenger> passengers; // Holds passengers at this floor
     private int ID;
     private boolean DEBUG = false;
 
@@ -53,7 +53,7 @@ public class Floor {
         }else if(randFloor == (numberOfFloors - 1)){
             direction = 0; // Direction is down
         }else {
-            direction = rand.nextInt(1); // Randomly select direction
+            direction = rand.nextInt(2); // Randomly select direction
         }
 
         if (DEBUG) {

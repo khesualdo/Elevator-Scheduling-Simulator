@@ -2,28 +2,6 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.PriorityBlockingQueue;
 
-class Tor{
-    private int number;
-    private int ID;
-
-    public Tor(int number, int ID) {
-        this.number = number;
-        this.ID = ID;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-}
-
 //class CallComparator implements Comparator<Call> {
 //
 //    /**
@@ -70,68 +48,22 @@ class Tor{
 
 public class QueueTest {
 
-    private PriorityBlockingQueue<Call> sequence;
-    private Random rand;
-    private int counter;
-    private Comparator<Call> comparator;
-
-    public QueueTest(){
-//        this.comparator = new CallComparator();
-        this.sequence = new PriorityBlockingQueue<>(100, this.comparator);
-        this.rand = new Random();
-        counter = 0;
-    }
-
-//    public void displayItems(){
-//
-//        for(Tor i : sequence){
-//            System.out.printf("Item %d with value %d.\n", i.getID(), i.getNumber());
-//        }
-//
-//        System.out.println("-------\n");
-//
-//    }
-//
-//    public void modifyItems(){
-//
-//        Tor[] tempArr = new Tor[sequence.size()]; // Create an array of the same size as the queue
-//        sequence.toArray(tempArr); // Populate the array
-//        sequence.clear(); // Remove all elements from the queue
-//
-//        // Decrement every element in the array
-//        // and append it to the queue
-//        for(Tor i : tempArr){
-//            sequence.put(new Tor(i.getNumber() - 1, i.getID()));
-//        }
-//
-//    }
-
-//    public void addItems(){
-//        this.sequence.add(new Tor(this.rand.nextInt(10), this.counter++));
-//        displayItems();
-//    }
-//
-//    public void addItemsThread(){
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//
-//                    while (true) {
-//                        addItems();
-//                        Thread.sleep(5000);
-//                    }
-//
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
-//    }
-
     public static void main(String[] args) throws InterruptedException {
 
-        Random rand = new Random();
+//        PriorityBlockingQueue<Integer> sequence = new PriorityBlockingQueue<>(2);
+//        if (sequence.size() > 1)
+//            sequence.take();
+//        System.out.println("Here");
+//        System.out.println(sequence.size());
+
+//        System.out.println(Math.ceil((double)3/4));
+//        System.out.println(2/3);
+
+        for(int i = 0; i < 25; i++){
+            System.out.println(Math.floor((double)i / 7));
+        }
+
+//        Random rand = new Random();
 //        Comparator<Call> comparator = new CallComparator();
 //        PriorityBlockingQueue<Call> sequence = new PriorityBlockingQueue<>(100, comparator);
 
@@ -162,101 +94,6 @@ public class QueueTest {
 //        while(!sequence.isEmpty()){
 //            Call i = sequence.take();
 //            System.out.printf("Passage: %d, Floor: %d.\n", i.getPassage(), i.getFloor());
-//        }
-
-
-//        for(Tor i : sequence){
-//            System.out.printf("Item %d with value %d.\n", i.getID(), i.getNumber());
-//        }
-//
-//        System.out.println("---");
-//
-//        Tor[] t = new Tor[sequence.size()];
-//        sequence.toArray(t);
-//
-//        for(Tor i : t){
-//            System.out.printf("Item %d with value %d.\n", i.getID(), i.getNumber());
-//        }
-//
-//        System.out.println("---");
-
-//        new Thread(new Runnable() {
-//
-//            int counter = 20;
-//
-//            @Override
-//            public void run() {
-//                while (true){
-//                    sequence.add(new Tor(counter++, counter++));
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }).start();
-
-//        while(!sequence.isEmpty()){
-//            Tor temp = sequence.take();
-//            temp.setNumber(temp.getNumber() - 1);
-//            tempSequence.add(temp);
-//        }
-//
-//        while(!tempSequence.isEmpty()){
-//            Tor temp = tempSequence.take();
-//            System.out.printf("Item %d with value %d.\n", temp.getID(), temp.getNumber());
-//        }
-//
-//        System.out.println(sequence.isEmpty());
-//
-//        System.out.println("-----");
-//
-//        while(!sequence.isEmpty()){
-//            Tor temp = sequence.take();
-//            System.out.printf("Item %d with value %d.\n", temp.getID(), temp.getNumber());
-//        }
-//
-//        QueueTest qt = new QueueTest();
-
-
-
-//        qt.addItemsThread();
-
-//        while (true){
-//
-//            System.out.println("\n\n---------------\n\n");
-//            qt.displayItems();
-////            qt.modifyItems();
-////            qt.displayItems();
-//            System.out.println("\n\n---------------\n\n");
-//
-//            Thread.sleep(5000);
-//        }
-
-
-//        for(Integer i : sequence){
-//            System.out.println(i);
-//
-//            if (i == 5){
-//                sequence.remove(5);
-//            }
-//
-//        }
-
-
-//        Integer[] tempArr = new Integer[sequence.size()]; // Create an array of the same size as the queue
-//        sequence.toArray(tempArr); // Populate the array
-//        sequence.clear(); // Remove all elements from the queue
-//
-//        // Decrement every element in the array
-//        // and append it to the queue
-//        for(Integer i : tempArr){
-//            sequence.put(i - 1);
-//        }
-
-//        for(Integer i : sequence){
-//            System.out.println(i);
 //        }
 
     }

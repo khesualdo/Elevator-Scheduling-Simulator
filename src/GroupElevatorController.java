@@ -6,7 +6,12 @@ public class GroupElevatorController implements Runnable {
     private int algorithm;
     private int start;
 
-    private RR rr;
+    private int N; // Number of floors
+    private int L; // Number of elevators
+    private int U; // Building population
+
+    private RoundRobin roundRobin;
+    private Zoning zoning;
 
     public GroupElevatorController(Elevator[] elevatorGroup, Floor[] floors){
 
@@ -17,10 +22,17 @@ public class GroupElevatorController implements Runnable {
 
         this.start = 0;
 
-        this.rr = new RR();
+        this.roundRobin = new RoundRobin();
+        this.zoning = new Zoning();
     }
 
     public void setAlgorithm(int algorithm){ this.algorithm = algorithm; }
+
+    public void setL(int l) { L = l; }
+
+    public void setN(int n) { N = n; }
+
+    public void setU(int u) { U = u; }
 
     @Override
     public void run(){
@@ -54,11 +66,7 @@ public class GroupElevatorController implements Runnable {
 
             if(floor.getPassengers().size() > 0){
 
-                // System.out.printf("Floor %d has %d passenger(s)\n", floor.getID(), floor.getPassengers().size());
-
                 tempPassenger = floor.getPassengers().take(); // Remove the passenger from queue
-
-                // System.out.printf("Registered a passenger from floor %d\n", floor.getID());
 
                 // Remembers from which index to start scanning next time
                 if(i == (floors.length - 1)){
@@ -86,14 +94,19 @@ public class GroupElevatorController implements Runnable {
             // The chosen elevator will be given a task (receive job)
             switch (this.algorithm) {
                 case 1:
-                    chosenElevator = rr.choseElevator(elevatorGroup);
+                    chosenElevator = roundRobin.choseElevator(elevatorGroup, this.L);
+                    break;
+                case 2:
+                    chosenElevator = roundRobin.choseElevator(elevatorGroup, this.L);
+                    break;
+                case 3:
+                    chosenElevator = zoning.choseElevator(this.L, this.N, tempPassenger.getFloorCall().getFloor());
                     break;
                 default:
-                    chosenElevator = rr.choseElevator(elevatorGroup);
+                    chosenElevator = roundRobin.choseElevator(elevatorGroup, this.L);
                     break;
             }
 
-            // System.out.printf("Elevator %d has received a job from %d floor.\n", chosenElevator, tempPassenger.getFloorCall().getFloor());
             this.elevatorGroup[chosenElevator].receiveJob(tempPassenger); // Assign a passenger to an elevator
         }
 

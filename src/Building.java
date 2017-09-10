@@ -24,6 +24,9 @@ public class Building {
         this.floors = new Floor[this.N];
 
         this.controller = new GroupElevatorController(this.elevatorGroup, this.floors);
+        this.controller.setN(this.N);
+        this.controller.setL(this.L);
+        this.controller.setU(this.U);
 
         this.rand = new Random();
         this.reader = new Scanner(System.in);
@@ -42,13 +45,19 @@ public class Building {
                     1, 1, this.U / 4, 3);
             this.elevatorGroup[i].setCurrentFloor(N/2); // This will depend on the algorithm
             this.elevatorGroup[i].setDirection(1);
-            this.elevatorGroup[i].setNumberOfFloors(N);
+            this.elevatorGroup[i].setN(N);
+            this.elevatorGroup[i].setL(L);
         }
 
         // Create elevator threads
         for(int i=0; i<this.L; ++i){
             this.elevatorGroup[i].elevatorControllerThread();
             this.elevatorGroup[i].performJobThread();
+
+            // Active the thread only if user chose Up-peak
+            if (this.algorithm == 2) {
+                this.elevatorGroup[i].upPeakThread();
+            }
         }
     }
 
@@ -79,30 +88,37 @@ public class Building {
         if((args.length == 3) && (Integer.parseInt(args[0]) > 1) &&
                 (Integer.parseInt(args[1]) > 0) && (Integer.parseInt(args[2]) > 0)) {
 
-            Building building = new Building(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+            if (Integer.parseInt(args[0]) > Integer.parseInt(args[1])) {
 
-            // Chose algorithm
-            building.setAlgorithm(1);
-            building.getController().setAlgorithm(1);
-            // System.out.println("Choose algorithm:");
-            // System.out.println("1 - Round Robin");
-            // building.setAlgorithm(reader.nextInt());
+                Building building = new Building(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
-            // Create N number of Floor objects
-            building.createFloors();
+                // Chose algorithm
+                building.setAlgorithm(3);
+                building.getController().setAlgorithm(3);
+                // System.out.println("Choose algorithm:");
+                // System.out.println("1 - Round-Robin");
+                // System.out.println("2 - Up-Peak");
+                // System.out.println("3 - Zoning");
+                // building.setAlgorithm(reader.nextInt());
 
-            // Create L number of Elevator objects
-            building.createElevators();
+                // Create N number of Floor objects
+                building.createFloors();
 
-            // Start the GroupElevatorController thread
-            new Thread(building.getController()).start(); // Activates the GroupElevatorController to scan the floors array
+                // Create L number of Elevator objects
+                building.createElevators();
 
-            // Keep generating passengers on different floors of the building
-            while(true) {
+                // Start the GroupElevatorController thread
+                new Thread(building.getController()).start(); // Activates the GroupElevatorController to scan the floors array
 
-                // Generate a passenger on one of the floors
-                building.generatePassenger(building.getN());
-                Thread.sleep(15000);
+                // Keep generating passengers on different floors of the building
+                while (true) {
+
+                    // Generate a passenger on one of the floors
+                    building.generatePassenger(building.getN());
+                    Thread.sleep(20000);
+                }
+            } else {
+                System.out.println("The number of floors cannot be less than number of elevators.");
             }
 
         }else{

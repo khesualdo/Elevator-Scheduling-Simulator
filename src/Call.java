@@ -5,12 +5,14 @@ public class Call {
     private int floor; // floor call - from where, car call - to where
     private int direction; // 1 - Up, 0 - Down
     private String ID;
+    private boolean specialCall;
 
     public Call(int type, int floor, int direction, String ID) {
         this.type = type;
         this.floor = floor;
         this.direction = direction;
         this.ID = ID;
+        this.specialCall = false;
     }
 
     public void setPassage(int passage) {
@@ -35,5 +37,13 @@ public class Call {
 
     public String getID() {
         return ID;
+    }
+
+    public void setSpecialCall(boolean specialCall) {
+        this.specialCall = specialCall;
+    }
+
+    public boolean isSpecialCall() {
+        return specialCall;
     }
 }
