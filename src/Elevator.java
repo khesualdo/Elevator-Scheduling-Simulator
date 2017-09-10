@@ -110,6 +110,22 @@ public class Elevator {
 
     public int getCapacity() { return capacity; }
 
+    public int getPassengerLoadingTime() {
+        return passengerLoadingTime;
+    }
+
+    public int getPassengerUnloadingTime() {
+        return passengerUnloadingTime;
+    }
+
+    public int getVelocity() {
+        return velocity;
+    }
+
+    public int getInterFloorHeight() {
+        return interFloorHeight;
+    }
+
     public PriorityBlockingQueue<Call> getSequence() { return sequence; }
 
     public boolean isIdle() { return idle; }
@@ -172,12 +188,15 @@ public class Elevator {
     }
 
     /**
-     * Eleators in idle state are repositioned to the zone’s lowest floor.
+     * Elevators in idle state are repositioned to the zone’s lowest floor.
      */
     public void zoningThread(){
         new Thread(new Runnable() {
             @Override
             public void run() {
+
+                int Z = new Double(Math.ceil((double) getN() / getL())).intValue();
+
                 while (true){
 
                     // Check if the elevator is idle
@@ -191,19 +210,15 @@ public class Elevator {
                         }
 
                         // Check if the elevator is still idle and
-                        // is not already on the lower floor
-                        if (getL() % 2 == 0) {
-                            if (isIdle() && getCurrentFloor() != (getID() * (getN() / getL()))) {
+                        // is not already in it's zone
+                        if (isIdle() && getCurrentFloor() != (getID() * Z)) {
 
-                                // Create the carCall and add it to the sequence
-                                Call tempCall = new Call(0, (getID() * (getN() / getL())), 0, "");
-                                tempCall.setPassage(1);
-                                tempCall.setSpecialCall(true);
+                            // Create the carCall and add it to the sequence
+                            Call tempCall = new Call(0, (getID() * Z), 0, "");
+                            tempCall.setPassage(1);
+                            tempCall.setSpecialCall(true);
 
-                                getSequence().add(tempCall);
-                            }
-                        } else {
-
+                            getSequence().add(tempCall);
                         }
                     }
 

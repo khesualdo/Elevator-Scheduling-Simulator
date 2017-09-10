@@ -12,6 +12,7 @@ public class GroupElevatorController implements Runnable {
 
     private RoundRobin roundRobin;
     private Zoning zoning;
+    private ThreePassage threePassage;
 
     public GroupElevatorController(Elevator[] elevatorGroup, Floor[] floors){
 
@@ -24,6 +25,7 @@ public class GroupElevatorController implements Runnable {
 
         this.roundRobin = new RoundRobin();
         this.zoning = new Zoning();
+        this.threePassage = new ThreePassage();
     }
 
     public void setAlgorithm(int algorithm){ this.algorithm = algorithm; }
@@ -101,6 +103,9 @@ public class GroupElevatorController implements Runnable {
                     break;
                 case 3:
                     chosenElevator = zoning.choseElevator(this.L, this.N, tempPassenger.getFloorCall().getFloor());
+                    break;
+                case 4:
+                    chosenElevator = threePassage.choseElevator(elevatorGroup);
                     break;
                 default:
                     chosenElevator = roundRobin.choseElevator(elevatorGroup, this.L);

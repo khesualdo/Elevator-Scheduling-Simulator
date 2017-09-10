@@ -2,7 +2,7 @@ public class Zoning {
 
     /**
      * Zoning Group Elevator Scheduling.
-     * Performs best for Down-peak situations.
+     *
      * Splits a building into several adjacent zones.
      *
      * Every elevator only serving floor calls that occur in the zone assigned to the respective car.

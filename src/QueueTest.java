@@ -60,7 +60,7 @@ public class QueueTest {
 //        System.out.println(2/3);
 
         for(int i = 0; i < 25; i++){
-            System.out.println(Math.floor((double)i / 7));
+            System.out.printf("%d, %d\n", i, (int)Math.floor((double)i / 7));
         }
 
 //        Random rand = new Random();

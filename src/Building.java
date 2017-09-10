@@ -54,9 +54,14 @@ public class Building {
             this.elevatorGroup[i].elevatorControllerThread();
             this.elevatorGroup[i].performJobThread();
 
-            // Active the thread only if user chose Up-peak
+            // Start this thread only if user chose Up-peak
             if (this.algorithm == 2) {
                 this.elevatorGroup[i].upPeakThread();
+            }
+
+            // Start this thread only if user chose Zoning
+            if (this.algorithm == 3){
+                this.elevatorGroup[i].zoningThread();
             }
         }
     }
@@ -93,12 +98,13 @@ public class Building {
                 Building building = new Building(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
                 // Chose algorithm
-                building.setAlgorithm(3);
-                building.getController().setAlgorithm(3);
+                building.setAlgorithm(4);
+                building.getController().setAlgorithm(4);
                 // System.out.println("Choose algorithm:");
                 // System.out.println("1 - Round-Robin");
                 // System.out.println("2 - Up-Peak");
                 // System.out.println("3 - Zoning");
+                // System.out.println("4 - Three Passage");
                 // building.setAlgorithm(reader.nextInt());
 
                 // Create N number of Floor objects
@@ -115,7 +121,7 @@ public class Building {
 
                     // Generate a passenger on one of the floors
                     building.generatePassenger(building.getN());
-                    Thread.sleep(20000);
+                    Thread.sleep(40000);
                 }
             } else {
                 System.out.println("The number of floors cannot be less than number of elevators.");
