@@ -25,8 +25,8 @@ public class ThreePassage {
             for (Elevator elevator : elevatorGroup) {
 
                 int calls = elevator.getSequence().size(); // Current number of calls in sequence
-                int elevatorCost = calls * ((elevator.getVelocity() * elevator.getInterFloorHeight()) +
-                        elevator.getPassengerLoadingTime() + elevator.getPassengerUnloadingTime()); // Total cost of all calls
+                int elevatorCost = (calls + 1) * ((elevator.getVelocity() * elevator.getInterFloorHeight()) +
+                        elevator.getPassengerLoadingTime() + elevator.getPassengerUnloadingTime()); // Total cost of all calls plus new call
 
                 if (elevatorCost < cost) {
                     cost = elevatorCost;

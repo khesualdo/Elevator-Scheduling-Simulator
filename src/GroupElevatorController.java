@@ -63,7 +63,6 @@ public class GroupElevatorController implements Runnable {
         // Look for a floor with at least one passenger
         for(int i=this.start; i<floors.length; ++i){
 
-            // System.out.printf("Currently checking floor %d.\n", i);
             Floor floor = floors[i];
 
             if(floor.getPassengers().size() > 0){
