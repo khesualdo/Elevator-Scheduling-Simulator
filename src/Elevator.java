@@ -70,7 +70,7 @@ public class Elevator {
     private int currentFloor;
     private int direction; // 1- Up, 0 - Down
     private boolean idle = true;
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
 
     private int passengerLoadingTime; // Always 1 second
     private int passengerUnloadingTime; // Always 1 second
@@ -428,6 +428,31 @@ public class Elevator {
         }
     }
 
+    /**
+     * Displays the current position of the elevator in a graphical way.
+     */
+    private void displayElevator(){
+
+        System.out.printf("\n\nElevator %d\n", this.ID);
+        System.out.println("------------------------------------------\n");
+        for(int i=0; i < N; ++i){
+
+            if (i == this.currentFloor){
+                System.out.print(" == ");
+            } else {
+                System.out.printf(" %d ", i);
+            }
+        }
+
+        if (this.direction == 1){
+            System.out.println("\n\n-->");
+        } else {
+            System.out.println("\n\n<--");
+        }
+        System.out.println("------------------------------------------\n\n");
+
+    }
+
     private void performJob() throws InterruptedException {
 
         if (this.sequence.size() > 0) {
@@ -478,6 +503,10 @@ public class Elevator {
 
                         checkSequence(tempCall);
 
+                        if(!DEBUG) {
+                            displayElevator();
+                        }
+
                     } else if (this.direction == 0 && this.currentFloor != 0) {
 
                         this.currentFloor -= 1;
@@ -489,6 +518,10 @@ public class Elevator {
                         }
 
                         checkSequence(tempCall);
+
+                        if(!DEBUG) {
+                            displayElevator();
+                        }
 
                     } else {
                         System.out.println("\n\n\n\n! + ! + ! Elevator is out of range - performJob() ! + ! + !\n\n\n\n");

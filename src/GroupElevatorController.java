@@ -61,7 +61,7 @@ public class GroupElevatorController implements Runnable {
         Passenger tempPassenger = null; // Create a dummy Passenger object
 
         // Look for a floor with at least one passenger
-        for(int i=this.start; i<floors.length; ++i){
+        for (int i=this.start; i<floors.length; ++i) {
 
             Floor floor = floors[i];
 

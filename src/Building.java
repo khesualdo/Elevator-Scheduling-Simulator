@@ -13,9 +13,8 @@ public class Building {
     private GroupElevatorController controller; // reference to the controller used for controller setup
 
     private Random rand;
-    private Scanner reader;
 
-    public Building(int N, int L, int U){
+    public Building(int N, int L, int U) {
         this.N = N;
         this.L = L;
         this.U = U;
@@ -29,28 +28,31 @@ public class Building {
         this.controller.setU(this.U);
 
         this.rand = new Random();
-        this.reader = new Scanner(System.in);
     }
 
-    public int getN() { return N; }
+    public int getN() {
+        return N;
+    }
 
-    public void setAlgorithm(int algorithm){ this.algorithm = algorithm; }
+    public void setAlgorithm(int algorithm) {
+        this.algorithm = algorithm;
+    }
 
     /**
      * Creates L Elevator objects in the elevatorGroup array.
      */
-    private void createElevators(){
-        for(int i=0; i<this.L; ++i){
+    private void createElevators() {
+        for (int i = 0; i < this.L; ++i) {
             this.elevatorGroup[i] = new Elevator(i, this.algorithm, 1,
                     1, 1, this.U / 4, 3);
-            this.elevatorGroup[i].setCurrentFloor(N/2); // This will depend on the algorithm
+            this.elevatorGroup[i].setCurrentFloor(N / 2);
             this.elevatorGroup[i].setDirection(1);
             this.elevatorGroup[i].setN(N);
             this.elevatorGroup[i].setL(L);
         }
 
         // Create elevator threads
-        for(int i=0; i<this.L; ++i){
+        for (int i = 0; i < this.L; ++i) {
             this.elevatorGroup[i].elevatorControllerThread();
             this.elevatorGroup[i].performJobThread();
 
@@ -60,7 +62,7 @@ public class Building {
             }
 
             // Start this thread only if user chose Zoning
-            if (this.algorithm == 3){
+            if (this.algorithm == 3) {
                 this.elevatorGroup[i].zoningThread();
             }
         }
@@ -69,8 +71,8 @@ public class Building {
     /**
      * Creates N Floor objects in the floors array.
      */
-    private void createFloors(){
-        for(int i=0; i<this.N; ++i){
+    private void createFloors() {
+        for (int i = 0; i < this.N; ++i) {
             this.floors[i] = new Floor(i);
         }
     }
@@ -90,7 +92,9 @@ public class Building {
 
     public static void main(String[] args) throws InterruptedException {
 
-        if((args.length == 3) && (Integer.parseInt(args[0]) > 1) &&
+        Scanner reader = new Scanner(System.in);
+
+        if ((args.length == 3) && (Integer.parseInt(args[0]) > 1) &&
                 (Integer.parseInt(args[1]) > 0) && (Integer.parseInt(args[2]) > 0)) {
 
             if (Integer.parseInt(args[0]) > Integer.parseInt(args[1])) {
@@ -98,14 +102,21 @@ public class Building {
                 Building building = new Building(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
                 // Chose algorithm
-                building.setAlgorithm(4);
-                building.getController().setAlgorithm(4);
-                // System.out.println("Choose algorithm:");
-                // System.out.println("1 - Round-Robin");
-                // System.out.println("2 - Up-Peak");
-                // System.out.println("3 - Zoning");
-                // System.out.println("4 - Three Passage");
-                // building.setAlgorithm(reader.nextInt());
+                System.out.println("\nChoose algorithm:\n");
+                System.out.println("\t1 - Round-Robin");
+                System.out.println("\t2 - Up-Peak");
+                System.out.println("\t3 - Zoning");
+                System.out.println("\t4 - Three Passage");
+
+                int tempAlgorithm = reader.nextInt();
+                while (tempAlgorithm < 1 || tempAlgorithm > 4) {
+                    tempAlgorithm = reader.nextInt();
+                }
+
+                building.setAlgorithm(tempAlgorithm); // Sets algorithm in Building class
+                building.getController().setAlgorithm(tempAlgorithm); // Sets algorithm in GroupElevatorController class
+
+                System.out.println("\nAll elevators start on the central floor of the building with direction up.\n");
 
                 // Create N number of Floor objects
                 building.createFloors();
@@ -121,13 +132,13 @@ public class Building {
 
                     // Generate a passenger on one of the floors
                     building.generatePassenger(building.getN());
-                    Thread.sleep(40000);
+                    Thread.sleep(20000);
                 }
             } else {
                 System.out.println("The number of floors cannot be less than number of elevators.");
             }
 
-        }else{
+        } else {
             System.out.println("Usage: java Building <number of floors, at least 2>\n\t\t<number of elevators, at least 1>\n\t\t<building population, at least 1>");
         }
     }
