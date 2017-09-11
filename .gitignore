@@ -160,4 +160,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+*.class
+
 # End of https://www.gitignore.io/api/macos,intellij,intellij+iml,intellij+all

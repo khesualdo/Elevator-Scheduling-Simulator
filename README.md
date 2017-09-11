@@ -1,12 +1,15 @@
+# Elevator Scheduling Simulation :office: :bank: :hotel: :department_store:
+---
+
 ## Data Structures Used
 
 * [CopyOnWriteArrayList - Source I](http://www.baeldung.com/java-copy-on-write-arraylist), [CopyOnWriteArrayList - Source II](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CopyOnWriteArrayList.html)
-    * It is possible to iterate over the list in a safe way, even when concurrent modification is happening
+    * Makes it possible to iterate over a list in a safe way, even when concurrent modification is happening
     * The data structure was used to hold `floorCalls` and `carCalls` in the Elevator class
 * [PriorityBlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/PriorityBlockingQueue.html)
     * Supplies blocking retrieval operations
     * Allows for custom element ordering
-    * The data structure was used to implement the `sequence`, in which the calls had to be sorted based on their passage
+    * The data structure was used to implement `sequence`, in which the calls had to be sorted based on their passage
 
 ## Group Scheduling Algorithms Implemented
 
@@ -16,7 +19,7 @@
 
 * Up-Peak
     * A variation of Round-Robin
-    * If an elevator is idle for ~7 seconds, then the elevator generates a call to itself to go down to the lobby
+    * If an elevator is idle for ~7 seconds, then a call is generated to take the elevator to the lobby
     * This reduces the waiting time for future passengers arriving at the lobby
 
 * Zoning
@@ -25,9 +28,9 @@
     * Implemented Static Zoning, zones are assigned permanently
 
 * Three-Passage
-    * Estimates the costs that would result from assigning the new call to the elevator
+    * Estimates the costs that would result from assigning a new call to the elevator
     * The call is assigned to the elevator with the lowest costs
-    * In case every elevator already reached 80% load (number of calls > 80% elevator capacity), calls will not get assigned until at least one elevator falls below this mark
+    * In case every elevator already reached 80% load (number of calls > 80% elevator's capacity), calls will not get assigned until at least one elevator falls below this mark
 
 ## Threads
 
