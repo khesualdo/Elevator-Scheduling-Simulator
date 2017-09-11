@@ -1,5 +1,7 @@
-# Elevator Scheduling Simulation :office: :bank: :hotel: :department_store:
+# Elevator Scheduling Simulator :office: :bank: :hotel: :department_store:
 ---
+
+## Usage
 
 ## Data Structures Used
 
@@ -69,6 +71,10 @@
 ### `Elevator.java` Thread IV
 
 * The `zoningThread` relocates elevators in idle state to go to a floor within their assigned zone.
+
+## Thread Communication
+
+
 
 ## Information Sources
 
