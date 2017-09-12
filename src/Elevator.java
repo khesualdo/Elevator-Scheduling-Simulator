@@ -70,7 +70,7 @@ public class Elevator {
     private int currentFloor;
     private int direction; // 1- Up, 0 - Down
     private boolean idle = true;
-    private boolean DEBUG = false;
+    private boolean DEBUG = true;
 
     private int passengerLoadingTime; // Always 1 second
     private int passengerUnloadingTime; // Always 1 second
@@ -453,6 +453,9 @@ public class Elevator {
 
     }
 
+    /**
+     * Simulates the elevator moving through the shaft
+     */
     private void performJob() throws InterruptedException {
 
         if (this.sequence.size() > 0) {
