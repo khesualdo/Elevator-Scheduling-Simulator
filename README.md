@@ -1,7 +1,17 @@
 # Elevator Scheduling Simulator :office: :bank: :hotel: :department_store:
 ---
 
-## Usage
+## Description
+
+A simulation environment, which mimics the scheduling of multiple elevators within a building on any size. The multithreaded approach to the program helps to simulate elevators running concurrently. The simulation also makes use of several group scheduling algorithms, which help to distribute the workload between elevator-cars as well as make the elevators adaptable to various situations.
+
+## How to Run
+
+```sh
+> cd src/
+> javac *.java
+> java Building <number of floors> <number of elevators> <building population>
+```
 
 ## Data Structures Used
 

@@ -38,6 +38,7 @@ public class GroupElevatorController implements Runnable {
 
     @Override
     public void run(){
+
         try {
             while(true) {
                 scheduler();

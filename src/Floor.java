@@ -6,7 +6,7 @@ public class Floor {
 
     LinkedBlockingQueue<Passenger> passengers; // Holds passengers at this floor
     private int ID;
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
 
     public Floor(int ID){
         this.passengers = new LinkedBlockingQueue<>();

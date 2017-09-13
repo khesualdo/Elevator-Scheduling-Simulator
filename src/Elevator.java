@@ -70,7 +70,7 @@ public class Elevator {
     private int currentFloor;
     private int direction; // 1- Up, 0 - Down
     private boolean idle = true;
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
 
     private int passengerLoadingTime; // Always 1 second
     private int passengerUnloadingTime; // Always 1 second
@@ -253,8 +253,6 @@ public class Elevator {
             @Override
             public void run() {
 
-                // System.out.println("Started the elevatorController thread.");
-
                 while (true){
                     try {
                         elevatorController();
@@ -323,7 +321,6 @@ public class Elevator {
         // Check the Calls in the sequence, if the sequence is not empty
         // Here we are looking for all carCalls and floorCalls that can be removed from sequence
         if (this.sequence.size() > 0) {
-
 
             // Traverse the Calls in the sequence to find out if
             // any Calls need to be remove, because their floor matches the currentFloor of the elevator
