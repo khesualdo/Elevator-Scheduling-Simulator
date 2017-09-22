@@ -83,10 +83,6 @@ A simulation environment, which mimics the scheduling of multiple elevators with
 
 * The `zoningThread` relocates elevators in idle state to go to a floor within their assigned zone.
 
-## Thread Communication
-
-
-
 ## Information Sources
 
 * [Object level locking vs. Class level locking](https://stackoverflow.com/questions/3718148/java-class-level-lock-vs-object-level-lock)
