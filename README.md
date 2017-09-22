@@ -3,7 +3,7 @@
 
 ## Description
 
-A simulation environment, which mimics the scheduling of multiple elevators within a building on any size. The multithreaded approach to the program helps to simulate elevators running concurrently. The simulation also makes use of several group scheduling algorithms, which help to distribute the workload between elevator-cars as well as make the elevators adaptable to various situations.
+A simulation environment, which mimics the scheduling of multiple elevators within a building of any size. The multithreaded approach helps to simulate elevators running concurrently. The simulation also makes use of several group scheduling algorithms, which help to distribute the workload between elevator-cars as well as make the elevators adaptable to various situations.
 
 ## How to Run
 
@@ -17,6 +17,7 @@ A simulation environment, which mimics the scheduling of multiple elevators with
 
 * [CopyOnWriteArrayList - Source I](http://www.baeldung.com/java-copy-on-write-arraylist), [CopyOnWriteArrayList - Source II](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CopyOnWriteArrayList.html)
     * Makes it possible to iterate over a list in a safe way, even when concurrent modification is happening
+        * Creates a snapshot of the array, every time a mutation operation is invoked, hence, the iteration would always take place on the previous version of the array
     * The data structure was used to hold `floorCalls` and `carCalls` in the Elevator class
 * [PriorityBlockingQueue](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/PriorityBlockingQueue.html)
     * Supplies blocking retrieval operations
