@@ -3,7 +3,7 @@
 
 ## Description
 
-A simulation environment, which mimics the scheduling of multiple elevators within a building of any size. The multithreaded approach helps to simulate elevators running concurrently. The simulation also makes use of several group scheduling algorithms, which help to distribute the workload between elevator-cars as well as make the elevators adaptable to various situations.
+A simulation environment, which mimics the scheduling of multiple elevators within a building of any size. The multithreaded approach helps to simulate elevators running in parallel. The simulation also makes use of several group scheduling algorithms, which help to distribute the workload between elevator-cars as well as make the elevators adaptable to various situations (eg. more people in the morning - Up-Peak, everyone is going to the main floor - Zoning).
 
 ## How to Run
 
