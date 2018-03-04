@@ -89,3 +89,17 @@ A simulation environment, which mimics the scheduling of multiple elevators with
 * [Intrinsic Locks and Synchronization](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html)
 * [PriorityBlockingQueue Javadoc](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/PriorityBlockingQueue.html)
 * [CopyOnWriteArrayList Javadoc](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CopyOnWriteArrayList.html)
+
+## What's Next
+* Analyze each algorithm by running the system with different inputs:
+   * Different number of elevators
+   * Different number of requests
+* Implement the functionality to switch dynamically between the algorithms during runtime
+* [Implemented disk scheduling algorithms](http://www.cs.iit.edu/~cs561/cs450/disksched/disksched.html):
+   * First Come-First Serve (FCFS)
+   * Shortest Seek Time First (SSTF)
+   * Elevator (SCAN) 
+   * Circular SCAN (C-SCAN)
+   * LOOK
+   * C-LOOK
+* Add GUI
