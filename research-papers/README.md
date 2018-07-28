@@ -75,7 +75,7 @@ of elevators, or
 		* **P3 Passage Three** calls **require reversing** the direction **twice**
 	* Floor calls with direction UP are only served by an elevator when travelling upwards, calls with direction DOWN only when travelling downwards
 
-	![Three Passage Group Elevator Scheduling Diagram](https://github.com/00111000/Elevator-Scheduling/blob/master/Three-Passage-Group-Elevator-Scheduling.png)
+	![Three Passage Group Elevator Scheduling Diagram](https://github.com/00111000/Elevator-Scheduling-Simulator/blob/master/research-papers/Three-Passage-Group-Elevator-Scheduling.png)
 
 	* The calls from floors 5 and 7 with direction UP can be served along the elevator’s current movement direction and are therefore P1 calls. Level 7, being the highest floor with the last calls to serve, is the **reversal floor**, as the elevator will have to reverse its travel direction at this position in order to serve the remaining calls
 	* The calls from level 6 and 2, both with direction DOWN, are therefore P2 calls, as direction is reversed once prior to serving
@@ -92,7 +92,7 @@ of elevators, or
 
 ## Simulations
 
-![UML Diagram](https://github.com/00111000/Elevator-Scheduling/blob/master/UML-Diagram.png)
+![UML Diagram](https://github.com/00111000/Elevator-Scheduling-Simulator/blob/master/research-papers/UML-Diagram.png)
 
 * Setup and Parameters
 	* Number of floors N
@@ -119,7 +119,7 @@ Passengers are modelled in the simulation as they behave in the real world, i.e.
 results in a better performance compared to switching based just on statistics
 	*  Decision could be made by an additional switching controller, hierarchically above the **Group Elevator Controller**
 
-![Context-Aware Elevator Systems Diagram](https://github.com/00111000/Elevator-Scheduling/blob/master/Context-Aware-Elevator-Systems.png)
+![Context-Aware Elevator Systems Diagram](https://github.com/00111000/Elevator-Scheduling-Simulator/blob/master/research-papers/Context-Aware-Elevator-Systems.png)
 
 * Context-Aware Group Scheduler Switching
 	* Correlation between the weather and the passenger traffic pattern during lunchtime. Assuming a restaurant is located at the top level as indicated in figure 3, offering a roof-deck for guests, we could conclude that office **workers will head to the top level during lunch hours on a sunny summer day**, therefore overlaying the usual lunch hour traffic pattern (from Mixed-peak to Up-peak). If we can conclude from some weather sensors that the roof-deck has high acceptance, the passenger traffic demand conforms to an Up-peak from Mixed-peak. Contrary, rain, snowfall, high wind speed or low temperature will have no effect on the standard Mixed-peak demand
